@@ -15,6 +15,19 @@
           }
         }
       },
+      "Dapper/2.1.35": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/Dapper.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/Dapper.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Google.Protobuf/3.26.1": {
         "type": "package",
         "compile": {
@@ -627,6 +640,27 @@
         "lib/netstandard2.0/BouncyCastle.Cryptography.dll",
         "lib/netstandard2.0/BouncyCastle.Cryptography.xml",
         "packageIcon.png"
+      ]
+    },
+    "Dapper/2.1.35": {
+      "sha512": "YKRwjVfrG7GYOovlGyQoMvr1/IJdn+7QzNXJxyMh0YfFF5yvDmTYaJOVYWsckreNjGsGSEtrMTpnzxTUq/tZQw==",
+      "type": "package",
+      "path": "dapper/2.1.35",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Dapper.png",
+        "dapper.2.1.35.nupkg.sha512",
+        "dapper.nuspec",
+        "lib/net461/Dapper.dll",
+        "lib/net461/Dapper.xml",
+        "lib/net5.0/Dapper.dll",
+        "lib/net5.0/Dapper.xml",
+        "lib/net7.0/Dapper.dll",
+        "lib/net7.0/Dapper.xml",
+        "lib/netstandard2.0/Dapper.dll",
+        "lib/netstandard2.0/Dapper.xml",
+        "readme.md"
       ]
     },
     "Google.Protobuf/3.26.1": {
@@ -2117,6 +2151,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "Dapper >= 2.1.35",
       "JObject >= 1.0.0",
       "Microsoft.AspNetCore.OpenApi >= 8.0.2",
       "MySql.Data >= 9.0.0",
@@ -2124,19 +2159,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Joao Victor\\.nuget\\packages\\": {}
+    "C:\\Users\\Luan.Granado\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\JoaoVictor\\Estudos\\SENAI\\UC - Projetos\\Projeto Fechadura\\api\\Nexus-webapi\\api\\api.csproj",
+      "projectUniqueName": "C:\\Projeto\\NexusLock\\Nexus-webapi\\api\\api.csproj",
       "projectName": "api",
-      "projectPath": "C:\\JoaoVictor\\Estudos\\SENAI\\UC - Projetos\\Projeto Fechadura\\api\\Nexus-webapi\\api\\api.csproj",
-      "packagesPath": "C:\\Users\\Joao Victor\\.nuget\\packages\\",
-      "outputPath": "C:\\JoaoVictor\\Estudos\\SENAI\\UC - Projetos\\Projeto Fechadura\\api\\Nexus-webapi\\api\\obj\\",
+      "projectPath": "C:\\Projeto\\NexusLock\\Nexus-webapi\\api\\api.csproj",
+      "packagesPath": "C:\\Users\\Luan.Granado\\.nuget\\packages\\",
+      "outputPath": "C:\\Projeto\\NexusLock\\Nexus-webapi\\api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Joao Victor\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Luan.Granado\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -2154,12 +2189,21 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "Dapper": {
+            "target": "Package",
+            "version": "[2.1.35, )"
+          },
           "JObject": {
             "target": "Package",
             "version": "[1.0.0, )"
