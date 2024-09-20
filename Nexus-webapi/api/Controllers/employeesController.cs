@@ -21,7 +21,6 @@ namespace Nexus_webapi.Controllers
         /// Retrieves all employees with optional pagination.
         /// </summary>
         [HttpGet]
-        [Authorize(Policy = "ViewRooms")]
         public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetAllEmployees([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var employees = await _context.Employees
@@ -76,7 +75,7 @@ namespace Nexus_webapi.Controllers
             var employee = new Employees
             {
                 Name = createDto.Name,
-                PinCode = createDto.PinCode,
+                PinCode = GenerateUniquePinCode(),
                 FingerprintData = !string.IsNullOrEmpty(createDto.FingerprintDataBase64) 
                     ? Convert.FromBase64String(createDto.FingerprintDataBase64) 
                     : null
@@ -89,10 +88,24 @@ namespace Nexus_webapi.Controllers
             {
                 EmployeeId = employee.EmployeeId,
                 Name = employee.Name,
+                PinCode = employee.PinCode,
                 FingerprintDataBase64 = employee.FingerprintData != null ? Convert.ToBase64String(employee.FingerprintData) : null
             };
 
             return CreatedAtAction(nameof(GetEmployeeById), new { id = employee.EmployeeId }, employeeDto);
+        }
+
+        private string GenerateUniquePinCode()
+        {
+            const string digits = "0123456789";
+            var rng = new Random();
+            string pin;
+            do
+            {
+                pin = new string(Enumerable.Repeat(digits, 4)
+                  .Select(s => s[rng.Next(s.Length)]).ToArray());
+            } while (_context.Employees.Any(e => e.PinCode == pin));
+            return pin;
         }
 
         /// <summary>
@@ -197,6 +210,7 @@ namespace Nexus_webapi.Controllers
         public int EmployeeId { get; set; }
         public string Name { get; set; }
         public string? FingerprintDataBase64 { get; set; }
+        public string PinCode { get; set; }
     }
 
     public class CreateEmployeeDto
@@ -204,6 +218,10 @@ namespace Nexus_webapi.Controllers
         [Required]
         [StringLength(100)]
         public string Name { get; set; }
+
+        [Required]
+        [StringLength(100, MinimumLength = 6)]
+        public string Password { get; set; }
 
         [StringLength(10)]
         public string? PinCode { get; set; }
@@ -220,7 +238,10 @@ namespace Nexus_webapi.Controllers
         [StringLength(100)]
         public string Name { get; set; }
 
-        [StringLength(10)]
+        [StringLength(100, MinimumLength = 6)]
+        public string? Password { get; set; }
+
+        [StringLength(4, MinimumLength = 4)]
         public string? PinCode { get; set; }
 
         public string? FingerprintDataBase64 { get; set; }

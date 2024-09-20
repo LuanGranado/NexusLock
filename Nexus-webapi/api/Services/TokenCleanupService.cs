@@ -1,11 +1,4 @@
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Nexus_webapi.Models;
-using Microsoft.Extensions.Logging;
 
 namespace Nexus_webapi.Services
 {

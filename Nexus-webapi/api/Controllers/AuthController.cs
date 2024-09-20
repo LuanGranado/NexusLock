@@ -6,6 +6,8 @@ using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using BCrypt.Net;
+
 namespace Nexus_webapi.Controllers
 {
     [ApiController]
@@ -35,18 +37,11 @@ namespace Nexus_webapi.Controllers
             var employee = await _context.Employees
                 .FirstOrDefaultAsync(e => e.Name == model.Username);
 
-            if (employee == null || model.Password != employee.PinCode)
+            if (employee == null || !BCrypt.Net.BCrypt.Verify(model.Password, employee.PasswordHash))
                 return Unauthorized("Invalid credentials.");
 
             var token = await _authService.GenerateTokenAsync(employee);
-            var userToken = new UserToken
-            {
-                EmployeeId = employee.EmployeeId,
-                Token = token,
-                Expiration = DateTime.UtcNow.AddMinutes(_jwtSettings.TokenLifetimeMinutes)
-            };
-
-            _context.UserTokens.Add(userToken);
+        
             await _context.SaveChangesAsync();
 
             return Ok(new { Token = token });

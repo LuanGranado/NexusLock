@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\api.csproj": {}
+    "C:\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\api.csproj": {}
   },
   "projects": {
-    "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\api.csproj": {
+    "C:\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\api.csproj",
+        "projectUniqueName": "C:\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\api.csproj",
         "projectName": "api",
-        "projectPath": "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\api.csproj",
-        "packagesPath": "C:\\Users\\fabio\\.nuget\\packages\\",
-        "outputPath": "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\obj\\",
+        "projectPath": "C:\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\api.csproj",
+        "packagesPath": "C:\\Users\\Joao Victor\\.nuget\\packages\\",
+        "outputPath": "C:\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\fabio\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Joao Victor\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -43,6 +43,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "BCrypt.Net": {
+              "target": "Package",
+              "version": "[0.1.0, )"
+            },
             "Dapper": {
               "target": "Package",
               "version": "[2.1.35, )"
@@ -109,7 +113,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.203/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.201/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

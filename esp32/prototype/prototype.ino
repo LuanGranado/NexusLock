@@ -1,7 +1,7 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
-#include <HardwareSerial.h>
+#include <SoftwareSerial.h>
 #include <fpm.h>
 #include <Keypad.h>
 
@@ -18,7 +18,7 @@ const char* accessAttemptEndpoint = "/AccessAttempt/attempt";
 #define FINGERPRINT_RX_PIN 25
 #define FINGERPRINT_TX_PIN 32
 
-HardwareSerial fserial(1);
+SoftwareSerial fserial(2, 3);
 FPM finger(&fserial);
 FPMSystemParams params;
 
@@ -46,6 +46,9 @@ char printfBuf[100];
 String enteredPinCode = "";
 int currentEmployeeId = -1;
 String authToken = "";
+uint32_t fingerprintPassword = 0;          // Default password
+uint32_t fingerprintAddress = 0xFFFFFFFF;  // Default address
+uint8_t fingerprintPacketLen = 2;          // Default packet length
 
 void setup() {
     Serial.begin(115200);
@@ -69,8 +72,13 @@ void loop() {
         handleKeypadInput(key);
     }
     
-    if (finger.getImage() == FPMStatus::OK) {
+    uint8_t imgStatus = finger.getImage();
+    if (imgStatus == FINGERPRINT_OK) {
         handleFingerprintInput();
+    } else if (imgStatus == FINGERPRINT_NOFINGER) {
+        // No finger detected, do nothing
+    } else {
+        Serial.printf("Error getting image: %d\n", imgStatus);
     }
     
     delay(50);
@@ -97,10 +105,13 @@ void connectToWiFi() {
 }
 
 void initializeFingerprint() {
-    if (finger.begin()) {
-        finger.readParams(&params);
-        Serial.println("Fingerprint sensor initialized!");
-        Serial.printf("Capacity: %d\n", params.capacity);
+    if (finger.begin(&fserial, fingerprintPassword, fingerprintAddress, fingerprintPacketLen)) {
+        if (finger.readParams(&params) == FINGERPRINT_OK) {
+            Serial.println("Fingerprint sensor initialized!");
+            Serial.printf("Capacity: %d\n", params.capacity);
+        } else {
+            Serial.println("Failed to read fingerprint parameters!");
+        }
     } else {
         Serial.println("Failed to initialize fingerprint sensor!");
     }
@@ -170,13 +181,20 @@ void handleFingerprintInput() {
 }
 
 bool scanAndMatchFinger() {
-    FPMStatus status = finger.image2Tz(1);
-    if (status != FPMStatus::OK) {
+    uint8_t status = finger.image2Tz(1);
+    if (status != FINGERPRINT_OK) {
+        Serial.printf("Image to template failed with status: %d\n", status);
         return false;
     }
 
-    status = finger.search(1, &currentEmployeeId);
-    return (status == FPMStatus::OK);
+    status = finger.match_pair();
+    if (status == FINGERPRINT_OK) {
+        currentEmployeeId = finger.fingerID;
+        return true;
+    } else {
+        Serial.printf("Match pair failed with status: %d\n", status);
+        return false;
+    }
 }
 
 void enrollNewFingerprint() {
@@ -197,7 +215,7 @@ void enrollNewFingerprint() {
 
 int getFreeID() {
     for (int id = 1; id <= params.capacity; id++) {
-        if (finger.loadTemplate(id) == FPMStatus::DBREADFAIL) {
+        if (finger.loadModel(id) == FINGERPRINT_DBREADFAIL) {
             return id;
         }
     }
@@ -205,27 +223,31 @@ int getFreeID() {
 }
 
 bool enrollFingerprint(int id) {
-    for (int i = 0; i < 2; i++) {
-        while (finger.getImage() != FPMStatus::OK) {
+    for (uint8_t i = 0; i < 2; i++) {
+        Serial.println("Waiting for finger...");
+        while (finger.getImage() != FINGERPRINT_OK) {
             delay(100);
         }
-        
-        if (finger.image2Tz(i + 1) != FPMStatus::OK) {
+
+        if (finger.image2Tz(i + 1) != FINGERPRINT_OK) {
+            Serial.println("Failed to convert image to template.");
             return false;
         }
-        
+
         Serial.println("Remove finger");
         delay(1000);
-        while (finger.getImage() != FPMStatus::NOFINGER) {
+        while (finger.getImage() != FINGERPRINT_NOFINGER) {
             delay(100);
         }
     }
 
-    if (finger.createModel() != FPMStatus::OK) {
+    if (finger.createModel() != FINGERPRINT_OK) {
+        Serial.println("Failed to create fingerprint model.");
         return false;
     }
 
-    if (finger.storeModel(id) != FPMStatus::OK) {
+    if (finger.storeModel(id) != FINGERPRINT_OK) {
+        Serial.println("Failed to store fingerprint model.");
         return false;
     }
 

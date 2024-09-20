@@ -21,20 +21,20 @@ USE `db_nexuslock` ;
 -- -----------------------------------------------------
 -- Table `db_nexuslock`.`employees`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `db_nexuslock`.`employees` ;
 
 CREATE TABLE IF NOT EXISTS `db_nexuslock`.`employees` (
   `employee_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
-  `pin_code` VARCHAR(10) NULL DEFAULT NULL,
+  `password_hash` VARCHAR(256) NOT NULL,
+  `pin_code` CHAR(4) NOT NULL,
   `fingerprint_data` VARBINARY(255) NULL DEFAULT NULL,
   `fingerprint_data_base64` LONGTEXT NULL DEFAULT NULL,
-  PRIMARY KEY (`employee_id`))
+  PRIMARY KEY (`employee_id`),
+  UNIQUE INDEX `UQ_pin_code` (`pin_code` ASC))
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
-
 
 -- -----------------------------------------------------
 -- Table `db_nexuslock`.`rooms`

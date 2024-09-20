@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="BCrypt.Net" Version="0.1.0" />
         <PackageReference Include="Dapper" Version="2.1.35" />
         <PackageReference Include="IdentityModel" Version="7.0.0" />
         <PackageReference Include="JObject" Version="1.0.0" />
