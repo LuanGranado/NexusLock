@@ -9,9 +9,11 @@ public class RolePermissions
     [Column("role_permission_id")]
     public int RolePermissionId { get; set; }
 
+    [Required]
     [Column("role_id")]
     public int RoleId { get; set; }
 
+    [Required]
     [Column("permission_id")]
     public int PermissionId { get; set; }
 

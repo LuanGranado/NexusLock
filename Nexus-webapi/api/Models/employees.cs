@@ -11,11 +11,16 @@ public class Employees
 
     [Required]
     [Column("name")]
+    [StringLength(100)]
     public string Name { get; set; }
 
     [Column("pin_code")]
-    public string PinCode { get; set; }
+    [StringLength(10)]
+    public string? PinCode { get; set; }
 
     [Column("fingerprint_data")]
-    public byte[] FingerprintData { get; set; }
+    public byte[]? FingerprintData { get; set; }
+
+    [Column("fingerprint_data_base64")]
+    public string? FingerprintDataBase64 { get; set; } 
 }

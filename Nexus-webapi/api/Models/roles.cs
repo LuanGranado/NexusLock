@@ -11,8 +11,11 @@ public class Roles
 
     [Required]
     [Column("role_name")]
+    [StringLength(50)]
     public string RoleName { get; set; }
 
     [Column("description")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
+
+    public ICollection<RolePermissions> RolePermissions { get; set; }
 }

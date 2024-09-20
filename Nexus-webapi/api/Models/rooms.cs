@@ -11,8 +11,9 @@ public class Rooms
 
     [Required]
     [Column("room_name")]
+    [StringLength(100)]
     public string RoomName { get; set; }
 
     [Column("room_description")]
-    public string RoomDescription { get; set; }
+    public string? RoomDescription { get; set; }
 }

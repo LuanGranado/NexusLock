@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Projeto\\NexusLock\\Nexus-webapi\\api\\api.csproj": {}
+    "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\api.csproj": {}
   },
   "projects": {
-    "C:\\Projeto\\NexusLock\\Nexus-webapi\\api\\api.csproj": {
+    "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projeto\\NexusLock\\Nexus-webapi\\api\\api.csproj",
+        "projectUniqueName": "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\api.csproj",
         "projectName": "api",
-        "projectPath": "C:\\Projeto\\NexusLock\\Nexus-webapi\\api\\api.csproj",
-        "packagesPath": "C:\\Users\\Luan.Granado\\.nuget\\packages\\",
-        "outputPath": "C:\\Projeto\\NexusLock\\Nexus-webapi\\api\\obj\\",
+        "projectPath": "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\api.csproj",
+        "packagesPath": "C:\\Users\\fabio\\.nuget\\packages\\",
+        "outputPath": "D:\\JV\\JoaoVictor\\Estudos\\SENAI\\NexusLock\\Nexus-webapi\\api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Luan.Granado\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\fabio\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -47,17 +47,43 @@
               "target": "Package",
               "version": "[2.1.35, )"
             },
+            "IdentityModel": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
             "JObject": {
               "target": "Package",
               "version": "[1.0.0, )"
             },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.IdentityModel.Tokens": {
               "target": "Package",
               "version": "[8.0.2, )"
             },
             "MySql.Data": {
               "target": "Package",
               "version": "[9.0.0, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[8.0.2, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -83,7 +109,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

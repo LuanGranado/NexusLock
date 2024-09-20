@@ -8,11 +8,12 @@ public class Permissions
     [Key]
     [Column("permission_id")]
     public int PermissionId { get; set; }
-
+    
     [Required]
-    [Column("permission_name")]
-    public string PermissionName { get; set; }
-
+    [Column("permission_key")]
+    [StringLength(50)]
+    public string PermissionKey { get; set; }
+    
     [Column("description")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 }
