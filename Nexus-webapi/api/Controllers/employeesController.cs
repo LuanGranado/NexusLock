@@ -3,6 +3,7 @@ using Nexus_webapi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace Nexus_webapi.Controllers
 {
@@ -30,7 +31,8 @@ namespace Nexus_webapi.Controllers
                 {
                     EmployeeId = e.EmployeeId,
                     Name = e.Name,
-                    FingerprintDataBase64 = e.FingerprintData != null ? Convert.ToBase64String(e.FingerprintData) : null
+                    FingerprintDataBase64 = e.FingerprintData != null ? Convert.ToBase64String(e.FingerprintData) : null,
+                    Email = e.Email
                 })
                 .ToListAsync();
 
@@ -49,7 +51,8 @@ namespace Nexus_webapi.Controllers
                 {
                     EmployeeId = e.EmployeeId,
                     Name = e.Name,
-                    FingerprintDataBase64 = e.FingerprintData != null ? Convert.ToBase64String(e.FingerprintData) : null
+                    FingerprintDataBase64 = e.FingerprintData != null ? Convert.ToBase64String(e.FingerprintData) : null,
+                    Email = e.Email
                 })
                 .FirstOrDefaultAsync();
 
@@ -89,7 +92,8 @@ namespace Nexus_webapi.Controllers
                 EmployeeId = employee.EmployeeId,
                 Name = employee.Name,
                 PinCode = employee.PinCode,
-                FingerprintDataBase64 = employee.FingerprintData != null ? Convert.ToBase64String(employee.FingerprintData) : null
+                FingerprintDataBase64 = employee.FingerprintData != null ? Convert.ToBase64String(employee.FingerprintData) : null,
+                Email = employee.Email
             };
 
             return CreatedAtAction(nameof(GetEmployeeById), new { id = employee.EmployeeId }, employeeDto);
@@ -197,6 +201,17 @@ namespace Nexus_webapi.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Checks if the user is an admin.
+        /// In theory if the user is authenticated, the token is valid and the user has the AdminAccess policy, the user is an admin. If not, the user is not an admin and the request is forbidden.
+        /// </summary>
+        [Authorize(Policy = "AdminAccess")]
+        [HttpGet("isAdmin")]
+        public ActionResult<bool> IsAdmin()
+        {
+            return Ok(true);
+        }
+
         public class UpdateFingerprintDto
         {
             [Required]
@@ -211,6 +226,7 @@ namespace Nexus_webapi.Controllers
         public string Name { get; set; }
         public string? FingerprintDataBase64 { get; set; }
         public string PinCode { get; set; }
+        public string Email { get; set; }
     }
 
     public class CreateEmployeeDto
@@ -222,6 +238,10 @@ namespace Nexus_webapi.Controllers
         [Required]
         [StringLength(100, MinimumLength = 6)]
         public string Password { get; set; }
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
 
         [StringLength(10)]
         public string? PinCode { get; set; }
@@ -237,6 +257,10 @@ namespace Nexus_webapi.Controllers
         [Required]
         [StringLength(100)]
         public string Name { get; set; }
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
 
         [StringLength(100, MinimumLength = 6)]
         public string? Password { get; set; }

@@ -62,7 +62,7 @@ namespace Nexus_webapi.Controllers
                     EmployeeId = al.EmployeeId,
                     EmployeeName = al.Employee != null ? al.Employee.Name : null,
                     RoomId = al.RoomId,
-                    RoomName = al.Room != null ? al.Room.RoomName : null,
+                    RoomName = al.Room != null ? al.Room.Name : null,
                     AccessTime = al.AccessTime,
                     AccessGranted = al.AccessGranted
                 })
@@ -95,7 +95,7 @@ namespace Nexus_webapi.Controllers
                     EmployeeId = al.EmployeeId,
                     EmployeeName = al.Employee != null ? al.Employee.Name : null,
                     RoomId = al.RoomId,
-                    RoomName = al.Room != null ? al.Room.RoomName : null,
+                    RoomName = al.Room != null ? al.Room.Name : null,
                     AccessTime = al.AccessTime,
                     AccessGranted = al.AccessGranted
                 })
@@ -141,7 +141,7 @@ namespace Nexus_webapi.Controllers
                 EmployeeId = accessLog.EmployeeId,
                 EmployeeName = accessLog.Employee?.Name,
                 RoomId = accessLog.RoomId,
-                RoomName = accessLog.Room?.RoomName,
+                RoomName = accessLog.Room?.Name,
                 AccessTime = accessLog.AccessTime,
                 AccessGranted = accessLog.AccessGranted
             };
@@ -165,7 +165,7 @@ namespace Nexus_webapi.Controllers
                     EmployeeId = al.EmployeeId,
                     EmployeeName = al.Employee != null ? al.Employee.Name : null,
                     RoomId = al.RoomId,
-                    RoomName = al.Room != null ? al.Room.RoomName : null,
+                    RoomName = al.Room != null ? al.Room.Name : null,
                     AccessTime = al.AccessTime,
                     AccessGranted = al.AccessGranted
                 })

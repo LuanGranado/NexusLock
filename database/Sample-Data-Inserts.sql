@@ -1,70 +1,66 @@
--- -----------------------------------------------------
--- Sample Data Inserts
--- -----------------------------------------------------
+-- Sample data for employees
+INSERT INTO `db_nexuslock`.`employees` (`name`, `email`, `password_hash`, `pin_code`) VALUES
+('John Doe', 'john.doe@example.com', '$2a$12$1234567890123456789012', '1234'),
+('Jane Smith', 'jane.smith@example.com', '$2a$12$2345678901234567890123', '2345'),
+('Mike Johnson', 'mike.johnson@example.com', '$2a$12$3456789012345678901234', '3456'),
+('Emily Brown', 'emily.brown@example.com', '$2a$12$4567890123456789012345', '4567'),
+('David Wilson', 'david.wilson@example.com', '$2a$12$5678901234567890123456', '5678');
 
--- Insert sample employees
-INSERT INTO `db_nexuslock`.`employees` (`name`, `pin_code`, `fingerprint_data`, `fingerprint_data_base64`)
-VALUES
-    ('Alice Johnson', '4321', UNHEX('ABCDEF123456'), 'YWxpY2VfaW5mX2RhdGE='),
-    ('Bob Smith', '5678', UNHEX('123456ABCDEF'), 'Ym9iX2luZl9kYXRh'),
-    ('Charlie Brown', '8765', UNHEX('FEDCBA654321'), 'Y2hhcmxpZV9pbmZfZGF0YQ==');
+-- Sample data for rooms
+INSERT INTO `db_nexuslock`.`rooms` (`name`, `description`, `status`) VALUES
+('Conference Room A', 'Large conference room with projector', 0),
+('Office 101', 'Executive office', 0),
+('Lab 1', 'Research laboratory', 0),
+('Storage Room', 'General storage area', 0),
+('Break Room', 'Employee break and relaxation area', 0);
 
--- Insert sample rooms
-INSERT INTO `db_nexuslock`.`rooms` (`room_name`, `room_description`)
-VALUES
-    ('Server Room', 'Room containing all server hardware.'),
-    ('Office 101', 'Primary office space for staff.'),
-    ('Conference Hall', 'Large hall for meetings and conferences.');
+-- Sample data for roles
+INSERT INTO `db_nexuslock`.`roles` (`role_name`, `description`) VALUES
+('Admin', 'Full system access'),
+('Manager', 'Department management access'),
+('Employee', 'Basic employee access'),
+('Security', 'Security personnel access'),
+('Maintenance', 'Maintenance staff access');
 
--- Insert sample roles
-INSERT INTO `db_nexuslock`.`roles` (`role_name`, `description`)
-VALUES
-    ('Admin', 'Administrator with full access.'),
-    ('Manager', 'Manager with elevated access rights.'),
-    ('Employee', 'Standard employee with limited access.');
+-- Sample data for permissions
+INSERT INTO `db_nexuslock`.`permissions` (`permission_key`, `description`) VALUES
+('AdminAccess', 'Full system access'),
+('EDIT_USER', 'Edit existing user accounts'),
+('DELETE_USER', 'Delete user accounts'),
+('MANAGE_ROOMS', 'Manage room access and details'),
+('VIEW_LOGS', 'View access logs');
 
--- Insert sample permissions
-INSERT INTO `db_nexuslock`.`permissions` (`permission_key`, `description`)
-VALUES
-    ('ACCESS_SERVER_ROOM', 'Permission to access the server room.'),
-    ('ACCESS_OFFICE_101', 'Permission to access Office 101.'),
-    ('ACCESS_CONFERENCE_HALL', 'Permission to access the conference hall.');
+-- Sample data for employeeroles
+INSERT INTO `db_nexuslock`.`employeeroles` (`employee_id`, `role_id`) VALUES
+(1, 1), -- John Doe as Admin
+(2, 2), -- Jane Smith as Manager
+(3, 3), -- Mike Johnson as Employee
+(4, 4), -- Emily Brown as Security
+(5, 5); -- David Wilson as Maintenance
 
--- Assign roles to employees
-INSERT INTO `db_nexuslock`.`employeeroles` (`employee_id`, `role_id`)
-VALUES
-    (1, 1), -- Alice is an Admin
-    (2, 2), -- Bob is a Manager
-    (3, 3); -- Charlie is an Employee
+-- Sample data for employeeroomaccess
+INSERT INTO `db_nexuslock`.`employeeroomaccess` (`employee_id`, `room_id`) VALUES
+(1, 1), (1, 2), (1, 3), (1, 4), (1, 5), -- Admin has access to all rooms
+(2, 1), (2, 2), -- Manager has access to conference room and office
+(3, 1), (3, 5), -- Employee has access to conference room and break room
+(4, 1), (4, 2), (4, 3), (4, 4), (4, 5), -- Security has access to all rooms
+(5, 3), (5, 4), (5, 5); -- Maintenance has access to lab, storage, and break room
 
--- Assign room access to employees
-INSERT INTO `db_nexuslock`.`employeeroomaccess` (`employee_id`, `room_id`)
-VALUES
-    (1, 1), -- Alice can access Server Room
-    (1, 2), -- Alice can access Office 101
-    (2, 2), -- Bob can access Office 101
-    (3, 2); -- Charlie can access Office 101
+-- Sample data for rolepermissions
+INSERT INTO `db_nexuslock`.`rolepermissions` (`role_id`, `permission_id`) VALUES
+(1, 1), (1, 2), (1, 3), (1, 4), (1, 5), -- Admin has all permissions
+(2, 2), (2, 4), (2, 5), -- Manager can edit users, manage rooms, and view logs
+(3, 5), -- Employee can only view logs
+(4, 4), (4, 5), -- Security can manage rooms and view logs
+(5, 4), (5, 5); -- Maintenance can manage rooms and view logs
 
--- Assign permissions to roles
-INSERT INTO `db_nexuslock`.`rolepermissions` (`role_id`, `permission_id`)
-VALUES
-    (1, 1), -- Admin role has ACCESS_SERVER_ROOM
-    (1, 2), -- Admin role has ACCESS_OFFICE_101
-    (1, 3), -- Admin role has ACCESS_CONFERENCE_HALL
-    (2, 2), -- Manager role has ACCESS_OFFICE_101
-    (2, 3), -- Manager role has ACCESS_CONFERENCE_HALL
-    (3, 2); -- Employee role has ACCESS_OFFICE_101
+-- Sample data for accesslogs
+INSERT INTO `db_nexuslock`.`accesslogs` (`employee_id`, `room_id`, `access_granted`) VALUES
+(1, 1, 1),
+(2, 2, 1),
+(3, 1, 1),
+(3, 3, 0),
+(4, 4, 1),
+(5, 5, 1);
 
--- Insert sample access logs
-INSERT INTO `db_nexuslock`.`accesslogs` (`employee_id`, `room_id`, `access_time`, `access_granted`)
-VALUES
-    (1, 1, '2023-10-01 08:00:00', 1),
-    (2, 2, '2023-10-01 09:15:00', 1),
-    (3, 3, '2023-10-01 10:30:00', 0); -- Access denied for Charlie to Conference Hall
-
--- Insert sample user tokens
-INSERT INTO `db_nexuslock`.`usertokens` (`employee_id`, `token`, `expiration`)
-VALUES
-    (1, 'token_alice_123456', '2023-12-31 23:59:59'),
-    (2, 'token_bob_abcdef', '2023-11-30 23:59:59'),
-    (3, 'token_charlie_654321', '2023-10-31 23:59:59');
+-- Note: We're not inserting sample data for the usertokens table as tokens are typically generated dynamically during runtime.

@@ -274,3 +274,4 @@ C:\JoaoVictor\Estudos\SENAI\NexusLock\Nexus-webapi\api\obj\Debug\net8.0\refint\a
 C:\JoaoVictor\Estudos\SENAI\NexusLock\Nexus-webapi\api\obj\Debug\net8.0\api.pdb
 C:\JoaoVictor\Estudos\SENAI\NexusLock\Nexus-webapi\api\obj\Debug\net8.0\api.genruntimeconfig.cache
 C:\JoaoVictor\Estudos\SENAI\NexusLock\Nexus-webapi\api\obj\Debug\net8.0\ref\api.dll
+D:\JV\JoaoVictor\Estudos\SENAI\NexusLock\Nexus-webapi\api\bin\Debug\net8.0\BCrypt.Net.dll

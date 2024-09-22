@@ -29,8 +29,12 @@ namespace Nexus_webapi.Controllers
                 .Select(r => new RoomDto
                 {
                     RoomId = r.RoomId,
-                    RoomName = r.RoomName,
-                    RoomDescription = r.RoomDescription
+                    Name = r.Name,
+                    Description = r.Description,
+                    Status = r.Status,
+                    ImageBase64 = r.Image != null ? Convert.ToBase64String(r.Image) : null,
+                    OccupiedByEmployeeId = r.OccupiedByEmployeeId,
+                    OccupiedByEmployeeName = r.OccupiedByEmployee != null ? r.OccupiedByEmployee.Name : null
                 })
                 .ToListAsync();
 
@@ -48,8 +52,12 @@ namespace Nexus_webapi.Controllers
                 .Select(r => new RoomDto
                 {
                     RoomId = r.RoomId,
-                    RoomName = r.RoomName,
-                    RoomDescription = r.RoomDescription
+                    Name = r.Name,
+                    Description = r.Description,
+                    Status = r.Status,
+                    ImageBase64 = r.Image != null ? Convert.ToBase64String(r.Image) : null,
+                    OccupiedByEmployeeId = r.OccupiedByEmployeeId,
+                    OccupiedByEmployeeName = r.OccupiedByEmployee != null ? r.OccupiedByEmployee.Name : null
                 })
                 .FirstOrDefaultAsync();
 
@@ -72,10 +80,26 @@ namespace Nexus_webapi.Controllers
                 return BadRequest(ModelState);
             }
 
+            byte[]? imageData = null;
+            if (!string.IsNullOrEmpty(createDto.ImageBase64))
+            {
+                try
+                {
+                    imageData = Convert.FromBase64String(createDto.ImageBase64);
+                }
+                catch (FormatException)
+                {
+                    return BadRequest("Invalid image base64 string.");
+                }
+            }
+
             var room = new Rooms
             {
-                RoomName = createDto.RoomName,
-                RoomDescription = createDto.RoomDescription
+                Name = createDto.Name,
+                Description = createDto.Description,
+                Status = createDto.Status,
+                Image = imageData,
+                OccupiedByEmployeeId = createDto.OccupiedByEmployeeId
             };
 
             _context.Rooms.Add(room);
@@ -84,8 +108,12 @@ namespace Nexus_webapi.Controllers
             var roomDto = new RoomDto
             {
                 RoomId = room.RoomId,
-                RoomName = room.RoomName,
-                RoomDescription = room.RoomDescription
+                Name = room.Name,
+                Description = room.Description,
+                Status = room.Status,
+                ImageBase64 = room.Image != null ? Convert.ToBase64String(room.Image) : null,
+                OccupiedByEmployeeId = room.OccupiedByEmployeeId,
+                OccupiedByEmployeeName = room.OccupiedByEmployee != null ? room.OccupiedByEmployee.Name : null
             };
 
             return CreatedAtAction(nameof(GetRoomById), new { id = room.RoomId }, roomDto);
@@ -108,8 +136,26 @@ namespace Nexus_webapi.Controllers
                 return NotFound();
             }
 
-            room.RoomName = updateDto.RoomName;
-            room.RoomDescription = updateDto.RoomDescription;
+            if (!string.IsNullOrEmpty(updateDto.ImageBase64))
+            {
+                try
+                {
+                    room.Image = Convert.FromBase64String(updateDto.ImageBase64);
+                }
+                catch (FormatException)
+                {
+                    return BadRequest("Invalid image base64 string.");
+                }
+            }
+            else
+            {
+                room.Image = null; // Or retain existing image, based on your requirements
+            }
+
+            room.Name = updateDto.Name;
+            room.Description = updateDto.Description;
+            room.Status = updateDto.Status;
+            room.OccupiedByEmployeeId = updateDto.OccupiedByEmployeeId;
 
             _context.Entry(room).State = EntityState.Modified;
 
@@ -177,17 +223,30 @@ namespace Nexus_webapi.Controllers
     public class RoomDto
     {
         public int RoomId { get; set; }
-        public string RoomName { get; set; }
-        public string? RoomDescription { get; set; }
+        public string Name { get; set; }
+        public string? Description { get; set; }
+        public bool Status { get; set; }
+        public string? ImageBase64 { get; set; }
+        public int? OccupiedByEmployeeId { get; set; }
+        public string? OccupiedByEmployeeName { get; set; }
     }
 
     public class CreateRoomDto
     {
         [Required]
         [StringLength(100)]
-        public string RoomName { get; set; }
+        public string Name { get; set; }
 
-        public string? RoomDescription { get; set; }
+        public string? Description { get; set; }
+
+        public bool Status { get; set; } = false;
+
+        /// <summary>
+        /// Base64 encoded image string.
+        /// </summary>
+        public string? ImageBase64 { get; set; }
+
+        public int? OccupiedByEmployeeId { get; set; }
     }
 
     public class UpdateRoomDto
@@ -197,8 +256,17 @@ namespace Nexus_webapi.Controllers
 
         [Required]
         [StringLength(100)]
-        public string RoomName { get; set; }
+        public string Name { get; set; }
 
-        public string? RoomDescription { get; set; }
+        public string? Description { get; set; }
+
+        public bool Status { get; set; }
+
+        /// <summary>
+        /// Base64 encoded image string.
+        /// </summary>
+        public string? ImageBase64 { get; set; }
+
+        public int? OccupiedByEmployeeId { get; set; }
     }
 }

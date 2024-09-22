@@ -29,7 +29,12 @@ namespace Nexus_webapi.Services
             {
                 var context = scope.ServiceProvider.GetRequiredService<NexusDbContext>();
                 var now = DateTime.UtcNow;
-                var expiredTokens = context.UserTokens.Where(ut => ut.Expiration <= now).ToList();
+
+                // Find tokens where either the access token or refresh token has expired
+                var expiredTokens = context.UserTokens
+                    .Where(ut => ut.Expiration <= now )
+                    .ToList();
+
                 if (expiredTokens.Any())
                 {
                     context.UserTokens.RemoveRange(expiredTokens);

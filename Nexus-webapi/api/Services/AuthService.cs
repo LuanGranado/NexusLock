@@ -20,9 +20,6 @@ namespace Nexus_webapi.Services
 
         public async Task<string> GenerateTokenAsync(Employees employee)
         {
-            Console.WriteLine(_jwtSettings.Secret);
-            Console.WriteLine(_jwtSettings.TokenLifetimeMinutes);
-
             // Check if the employee already has a valid token
             var existingToken = _context.UserTokens
                 .Where(ut => ut.EmployeeId == employee.EmployeeId && ut.Expiration > DateTime.UtcNow)
@@ -43,9 +40,11 @@ namespace Nexus_webapi.Services
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, employee.EmployeeId.ToString()),
-                new Claim(ClaimTypes.Name, employee.Name)
+                new Claim(ClaimTypes.Name, employee.Name),
+                new Claim(ClaimTypes.Email, employee.Email)
                 // Add more claims as needed
             };
+
 
             // Add permissions as claims
             var permissions = from er in _context.EmployeeRoles
@@ -78,7 +77,8 @@ namespace Nexus_webapi.Services
             {
                 EmployeeId = employee.EmployeeId,
                 Token = tokenString,
-                Expiration = tokenDescriptor.Expires.Value
+                Expiration = tokenDescriptor.Expires.Value,
+                CreatedAt = DateTime.UtcNow
             };
             _context.UserTokens.Add(userToken);
             await _context.SaveChangesAsync();

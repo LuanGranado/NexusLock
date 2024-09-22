@@ -20,6 +20,13 @@ var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
 // Configure Services
 ConfigureServices(builder.Services, builder.Configuration);
 
+// Add Authorization
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminAccess", policy =>
+        policy.RequireClaim("Permission", "AdminAccess"));
+});
+
 // Add Authentication
 builder.Services.AddAuthentication(options =>
 {
@@ -40,18 +47,46 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidateLifetime = true,
     };
-});
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("ViewRooms", policy =>
-        policy.RequireClaim("Permission", "ViewRooms"));
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
+            if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+            {
+                context.Token = authHeader.Substring("Bearer ".Length).Trim();
+            }
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = context =>
+        {
+            Console.WriteLine($"Token validated for user: {context.Principal?.Identity?.Name}");
+            return Task.CompletedTask;
+        },
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+            return Task.CompletedTask;
+        },
+        OnChallenge = context =>
+        {
+            Console.WriteLine($"Authentication challenge issued: {context.Error}, {context.ErrorDescription}");
+            return Task.CompletedTask;
+        }
+    };
 });
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Add Token Cleanup Service
 builder.Services.AddHostedService<TokenCleanupService>();
+
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
+    loggingBuilder.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning);
+});
 
 var app = builder.Build();
 
@@ -87,7 +122,11 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     });
 
     // Add Authorization
-    services.AddAuthorization();
+    services.AddAuthorization(options =>
+    {
+        options.AddPolicy("AdminAccess", policy =>
+            policy.RequireClaim("Permission", "AdminAccess"));
+    });
 
     builder.Services.AddSwaggerGen(c =>
     {

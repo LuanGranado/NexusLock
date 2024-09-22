@@ -10,10 +10,23 @@ public class Rooms
     public int RoomId { get; set; }
 
     [Required]
-    [Column("room_name")]
+    [Column("name")]
     [StringLength(100)]
-    public string RoomName { get; set; }
+    public string Name { get; set; }
 
-    [Column("room_description")]
-    public string? RoomDescription { get; set; }
+    [Column("description")]
+    public string? Description { get; set; }
+
+    [Required]
+    [Column("status")]
+    public bool Status { get; set; } = false;
+
+    [Column("image", TypeName = "LONGBLOB")]
+    public byte[]? Image { get; set; }
+
+    [Column("occupied_by_employee_id")]
+    public int? OccupiedByEmployeeId { get; set; }
+
+    [ForeignKey("OccupiedByEmployeeId")]
+    public Employees? OccupiedByEmployee { get; set; }
 }

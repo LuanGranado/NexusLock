@@ -25,12 +25,14 @@ USE `db_nexuslock` ;
 CREATE TABLE IF NOT EXISTS `db_nexuslock`.`employees` (
   `employee_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
   `password_hash` VARCHAR(256) NOT NULL,
   `pin_code` CHAR(4) NOT NULL,
   `fingerprint_data` VARBINARY(255) NULL DEFAULT NULL,
   `fingerprint_data_base64` LONGTEXT NULL DEFAULT NULL,
   PRIMARY KEY (`employee_id`),
-  UNIQUE INDEX `UQ_pin_code` (`pin_code` ASC))
+  UNIQUE INDEX `UQ_pin_code` (`pin_code` ASC),
+  UNIQUE INDEX `UQ_email` (`email` ASC))
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8mb4
@@ -43,9 +45,14 @@ DROP TABLE IF EXISTS `db_nexuslock`.`rooms` ;
 
 CREATE TABLE IF NOT EXISTS `db_nexuslock`.`rooms` (
   `room_id` INT NOT NULL AUTO_INCREMENT,
-  `room_name` VARCHAR(100) NOT NULL,
-  `room_description` TEXT NULL DEFAULT NULL,
-  PRIMARY KEY (`room_id`))
+  `name` VARCHAR(100) NOT NULL,
+  `description` TEXT NULL DEFAULT NULL,
+  `status` BOOLEAN NOT NULL DEFAULT FALSE,
+  `image` LONGBLOB NULL DEFAULT NULL,
+  `occupied_by_employee_id` INT NULL,
+  PRIMARY KEY (`room_id`),
+  FOREIGN KEY (`occupied_by_employee_id`) REFERENCES `employees`(`employee_id`)
+)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -186,7 +193,7 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 8
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
-
+p-09876
 
 -- -----------------------------------------------------
 -- Table `db_nexuslock`.`usertokens`
@@ -198,8 +205,11 @@ CREATE TABLE IF NOT EXISTS `db_nexuslock`.`usertokens` (
   `employee_id` INT NOT NULL,
   `token` VARCHAR(1024) NOT NULL,
   `expiration` DATETIME NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`token_id`),
   INDEX `employee_id` (`employee_id` ASC) VISIBLE,
+  INDEX `token` (`token`(191) ASC) VISIBLE,
+  INDEX `expiration` (`expiration` ASC) VISIBLE,
   CONSTRAINT `usertokens_ibfk_1`
     FOREIGN KEY (`employee_id`)
     REFERENCES `db_nexuslock`.`employees` (`employee_id`)

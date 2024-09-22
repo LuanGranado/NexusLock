@@ -23,6 +23,9 @@ namespace Nexus_webapi.Models
         [Column("expiration")]
         public DateTime Expiration { get; set; }
 
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+
         [ForeignKey("EmployeeId")]
         public Employees Employee { get; set; }
     }

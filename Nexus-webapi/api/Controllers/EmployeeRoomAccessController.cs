@@ -34,7 +34,7 @@ namespace Nexus_webapi.Controllers
                     EmployeeId = era.EmployeeId,
                     EmployeeName = era.Employee != null ? era.Employee.Name : null,
                     RoomId = era.RoomId,
-                    RoomName = era.Room != null ? era.Room.RoomName : null
+                    RoomName = era.Room != null ? era.Room.Name : null
                 })
                 .ToListAsync();
 
@@ -57,7 +57,7 @@ namespace Nexus_webapi.Controllers
                     EmployeeId = era.EmployeeId,
                     EmployeeName = era.Employee != null ? era.Employee.Name : null,
                     RoomId = era.RoomId,
-                    RoomName = era.Room != null ? era.Room.RoomName : null
+                    RoomName = era.Room != null ? era.Room.Name : null
                 })
                 .FirstOrDefaultAsync();
 
@@ -99,7 +99,7 @@ namespace Nexus_webapi.Controllers
                 EmployeeId = access.EmployeeId,
                 EmployeeName = access.Employee?.Name,
                 RoomId = access.RoomId,
-                RoomName = access.Room?.RoomName
+                RoomName = access.Room?.Name
             };
 
             return CreatedAtAction(nameof(GetEmployeeRoomAccessById), new { id = access.AccessId }, accessDto);

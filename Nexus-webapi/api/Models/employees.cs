@@ -15,6 +15,12 @@ public class Employees
     public string Name { get; set; }
 
     [Required]
+    [Column("email")]
+    [StringLength(100)]
+    public string Email { get; set; }
+
+    [Required]
+
     [Column("password_hash")]
     [StringLength(256)]
     public string PasswordHash { get; set; }
